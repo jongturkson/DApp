@@ -29,7 +29,7 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
     }
  
     // ----- STATE VARIABLES -----
-    LandNFT public landNFT;                     // Reference to NFT contract
+    LandNFT public immutable landNFT;                     // Reference to NFT contract
     uint256 public parcelCount;                 // Total registered parcels
     
     mapping(uint256 => LandParcel) public parcels;      // parcelId → LandParcel

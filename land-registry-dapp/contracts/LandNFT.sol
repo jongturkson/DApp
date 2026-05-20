@@ -13,6 +13,8 @@ contract LandNFT is ERC721URIStorage, Ownable {
     error OnlyRegistryCanMint();
     error RegistryAlreadySet();
     error ZeroAddressNotAllowed();
+    // Add this line with the other custom errors, near the top of the contract
+    event RegistryAddressSet(address indexed registry, address indexed setBy);
 
     // Modifier to restrict functions exclusively to the LandRegistry contract
     modifier onlyRegistry() {
@@ -29,6 +31,7 @@ contract LandNFT is ERC721URIStorage, Ownable {
         if (_registry == address(0)) revert ZeroAddressNotAllowed();
         if (landRegistryAddress != address(0)) revert RegistryAlreadySet();
         landRegistryAddress = _registry;
+        emit RegistryAddressSet(_registry, msg.sender);
     }
 
     /// @notice Mints a unique land title NFT and attaches the IPFS document
@@ -37,7 +40,7 @@ contract LandNFT is ERC721URIStorage, Ownable {
     /// @param tokenId The unique Parcel ID representing the piece of land
     /// @param uri The IPFS link (CID) containing the actual land documents
     function mintLandToken(address to, uint256 tokenId, string memory uri) external onlyRegistry {
-        _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri); // Binds the IPFS document to the token permanently
+        _safeMint(to, tokenId);
     }
 }

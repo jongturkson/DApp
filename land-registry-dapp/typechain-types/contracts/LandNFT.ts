@@ -54,6 +54,7 @@ export interface LandNFTInterface extends Interface {
       | "BatchMetadataUpdate"
       | "MetadataUpdate"
       | "OwnershipTransferred"
+      | "RegistryAddressSet"
       | "Transfer"
   ): EventFragment;
 
@@ -256,6 +257,19 @@ export namespace OwnershipTransferredEvent {
   export interface OutputObject {
     previousOwner: string;
     newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RegistryAddressSetEvent {
+  export type InputTuple = [registry: AddressLike, setBy: AddressLike];
+  export type OutputTuple = [registry: string, setBy: string];
+  export interface OutputObject {
+    registry: string;
+    setBy: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -538,6 +552,13 @@ export interface LandNFT extends BaseContract {
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
+    key: "RegistryAddressSet"
+  ): TypedContractEvent<
+    RegistryAddressSetEvent.InputTuple,
+    RegistryAddressSetEvent.OutputTuple,
+    RegistryAddressSetEvent.OutputObject
+  >;
+  getEvent(
     key: "Transfer"
   ): TypedContractEvent<
     TransferEvent.InputTuple,
@@ -599,6 +620,17 @@ export interface LandNFT extends BaseContract {
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
+    >;
+
+    "RegistryAddressSet(address,address)": TypedContractEvent<
+      RegistryAddressSetEvent.InputTuple,
+      RegistryAddressSetEvent.OutputTuple,
+      RegistryAddressSetEvent.OutputObject
+    >;
+    RegistryAddressSet: TypedContractEvent<
+      RegistryAddressSetEvent.InputTuple,
+      RegistryAddressSetEvent.OutputTuple,
+      RegistryAddressSetEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<
