@@ -23,6 +23,7 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
         string location;        // Human-readable location description
         uint256 area;           // Area in square meters
         string documentCID;     // IPFS CID of the land title document
+        string metadataCID;     // IPFS CID of the ERC-721 metadata JSON  ← ADD THIS
         bool isRegistered;
         uint256 registeredAt;   // Unix timestamp
         uint256 lastTransferAt; // Unix timestamp of last ownership transfer
@@ -43,6 +44,7 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
         string location,
         uint256 area,
         string documentCID,
+        string metadataCID,     // ← ADD THIS
         uint256 timestamp
     );
  
@@ -114,12 +116,14 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
         address _owner,
         string memory _location,
         uint256 _area,
-        string memory _documentCID
+        string memory _documentCID,
+        string memory _metadataCID
     ) external onlyRegistrar nonReentrant returns (uint256) {
         require(_owner != address(0), "Invalid owner address");
         require(bytes(_location).length > 0, "Location cannot be empty");
         require(_area > 0, "Area must be greater than 0");
         require(bytes(_documentCID).length > 0, "Document CID cannot be empty");
+        require(bytes(_metadataCID).length > 0, "Metadata CID cannot be empty");
  
         parcelCount++;
         uint256 newParcelId = parcelCount;
@@ -130,6 +134,7 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
             location: _location,
             area: _area,
             documentCID: _documentCID,
+            metadataCID:   _metadataCID,
             isRegistered: true,
             registeredAt: block.timestamp,
             lastTransferAt: block.timestamp
@@ -139,12 +144,13 @@ contract LandRegistry is AccessControl, ReentrancyGuard {
         parcelHistory[newParcelId].push(_owner);
  
         // Mint an NFT to represent this land title
-        string memory tokenURI = string(abi.encodePacked("ipfs://", _documentCID));
+        // tokenURI now points to the metadata JSON, not directly to the PDF
+        string memory tokenURI = string(abi.encodePacked("ipfs://", _metadataCID)); // ← CHANGED
         
         // Ensure LandNFT has this specific function signature
         landNFT.mintLandToken(_owner, newParcelId, tokenURI); 
  
-        emit LandRegistered(newParcelId, _owner, _location, _area, _documentCID, block.timestamp);
+        emit LandRegistered(newParcelId, _owner, _location, _area, _documentCID, _metadataCID, block.timestamp);
  
         return newParcelId;
     }

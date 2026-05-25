@@ -30,6 +30,7 @@ export declare namespace LandRegistry {
     location: string;
     area: BigNumberish;
     documentCID: string;
+    metadataCID: string;
     isRegistered: boolean;
     registeredAt: BigNumberish;
     lastTransferAt: BigNumberish;
@@ -41,6 +42,7 @@ export declare namespace LandRegistry {
     location: string,
     area: bigint,
     documentCID: string,
+    metadataCID: string,
     isRegistered: boolean,
     registeredAt: bigint,
     lastTransferAt: bigint
@@ -50,6 +52,7 @@ export declare namespace LandRegistry {
     location: string;
     area: bigint;
     documentCID: string;
+    metadataCID: string;
     isRegistered: boolean;
     registeredAt: bigint;
     lastTransferAt: bigint;
@@ -163,7 +166,7 @@ export interface LandRegistryInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "registerLand",
-    values: [AddressLike, string, BigNumberish, string]
+    values: [AddressLike, string, BigNumberish, string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "removeRegistrar",
@@ -274,6 +277,7 @@ export namespace LandRegisteredEvent {
     location: string,
     area: BigNumberish,
     documentCID: string,
+    metadataCID: string,
     timestamp: BigNumberish
   ];
   export type OutputTuple = [
@@ -282,6 +286,7 @@ export namespace LandRegisteredEvent {
     location: string,
     area: bigint,
     documentCID: string,
+    metadataCID: string,
     timestamp: bigint
   ];
   export interface OutputObject {
@@ -290,6 +295,7 @@ export namespace LandRegisteredEvent {
     location: string;
     area: bigint;
     documentCID: string;
+    metadataCID: string;
     timestamp: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -517,12 +523,23 @@ export interface LandRegistry extends BaseContract {
   parcels: TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [bigint, string, string, bigint, string, boolean, bigint, bigint] & {
+      [
+        bigint,
+        string,
+        string,
+        bigint,
+        string,
+        string,
+        boolean,
+        bigint,
+        bigint
+      ] & {
         parcelId: bigint;
         owner: string;
         location: string;
         area: bigint;
         documentCID: string;
+        metadataCID: string;
         isRegistered: boolean;
         registeredAt: bigint;
         lastTransferAt: bigint;
@@ -536,7 +553,8 @@ export interface LandRegistry extends BaseContract {
       _owner: AddressLike,
       _location: string,
       _area: BigNumberish,
-      _documentCID: string
+      _documentCID: string,
+      _metadataCID: string
     ],
     [bigint],
     "nonpayable"
@@ -662,12 +680,23 @@ export interface LandRegistry extends BaseContract {
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [bigint, string, string, bigint, string, boolean, bigint, bigint] & {
+      [
+        bigint,
+        string,
+        string,
+        bigint,
+        string,
+        string,
+        boolean,
+        bigint,
+        bigint
+      ] & {
         parcelId: bigint;
         owner: string;
         location: string;
         area: bigint;
         documentCID: string;
+        metadataCID: string;
         isRegistered: boolean;
         registeredAt: bigint;
         lastTransferAt: bigint;
@@ -682,7 +711,8 @@ export interface LandRegistry extends BaseContract {
       _owner: AddressLike,
       _location: string,
       _area: BigNumberish,
-      _documentCID: string
+      _documentCID: string,
+      _metadataCID: string
     ],
     [bigint],
     "nonpayable"
@@ -780,7 +810,7 @@ export interface LandRegistry extends BaseContract {
   >;
 
   filters: {
-    "LandRegistered(uint256,address,string,uint256,string,uint256)": TypedContractEvent<
+    "LandRegistered(uint256,address,string,uint256,string,string,uint256)": TypedContractEvent<
       LandRegisteredEvent.InputTuple,
       LandRegisteredEvent.OutputTuple,
       LandRegisteredEvent.OutputObject

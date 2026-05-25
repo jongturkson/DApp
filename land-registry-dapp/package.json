@@ -10,6 +10,7 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@types/chai": "^4.3.16",
+    "@types/form-data": "^2.2.1",
     "@types/mocha": "^10.0.7",
     "@types/node": "^22.0.0",
     "hardhat": "^2.22.0",
